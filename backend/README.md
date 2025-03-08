@@ -184,3 +184,98 @@ The request body should be a JSON object containing the following fields:
   }
 }
 ```
+
+# Captain Login Endpoint
+
+## POST /captains/login
+
+### Description
+This endpoint allows a captain to log in by providing their email and password.
+
+### Request Body
+The request body should be a JSON object containing the following fields:
+- `email` (string, required): The email address of the captain.
+- `password` (string, required): The password of the captain.
+
+### Response
+- `200 OK`: Login successful. Returns a JSON object containing the authentication token and captain details.
+- `400 Bad Request`: Validation error. Returns a JSON object containing the validation errors.
+- `401 Unauthorized`: Invalid email or password. Returns a JSON object with an error message.
+
+### Example Request
+```json
+{
+  "email": "jane.doe@example.com",
+  "password": "password123"
+}
+```
+
+### Example Response
+```json
+{
+  "token": "your_jwt_token",
+  "captain": {
+    "_id": "captain_id",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+# Captain Profile Endpoint
+
+## GET /captains/profile
+
+### Description
+This endpoint retrieves the profile information of the authenticated captain.
+
+### Response
+- `200 OK`: Returns a JSON object containing the captain details.
+- `401 Unauthorized`: Captain is not authenticated. Returns a JSON object with an error message.
+
+### Example Response
+```json
+{
+  "captain": {
+    "_id": "captain_id",
+    "fullname": {
+      "firstname": "Jane",
+      "lastname": "Doe"
+    },
+    "email": "jane.doe@example.com",
+    "vehicle": {
+      "color": "red",
+      "plate": "ABC123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+# Captain Logout Endpoint
+
+## GET /captains/logout
+
+### Description
+This endpoint logs out the authenticated captain by clearing the authentication token.
+
+### Response
+- `200 OK`: Logout successful. Returns a JSON object with a success message.
+- `401 Unauthorized`: Captain is not authenticated. Returns a JSON object with an error message.
+
+### Example Response
+```json
+{
+  "message": "logout success"
+}
+```

@@ -9,7 +9,7 @@ module.exports.userRegister = async(req, res, next)=>{
         return res.status(400).json({errors : errors.array()});
     
     const {fullname, email, password} = req.body;
-
+    
     const isUserExist = await User.findOne({email});
     if(isUserExist)
         return res.status(400).json({message : "user already exist"});
@@ -24,7 +24,7 @@ module.exports.userRegister = async(req, res, next)=>{
     })
 
     const token = user.generateAuthToken();
-    return res.json({token, user});
+    return res.status(201).json({token, user});
 }
 
 module.exports.userLogin = async(req, res, next)=>{
@@ -46,16 +46,16 @@ module.exports.userLogin = async(req, res, next)=>{
 
     const token = user.generateAuthToken();
     res.cookie("token", token);
-    return res.json({token, user});
+    return res.status(201).json({token, user});
 }
 
 module.exports.userProfile = async(req, res, next)=>{
-    return res.json(req.user);
+    return res.status(200).json(req.user);
 }
 
 module.exports.userLogout = async(req, res, next)=>{
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
     await BlacklistToken.create({token});
     res.clearCookie("token");
-    return res.json({message : "logout success"});
+    return res.status(200).json({message : "logout success"});
 }

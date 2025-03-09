@@ -1,20 +1,31 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import axios from 'axios'
+import { userDataContext } from '../context/UserContext'
 
 function UserLogin() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [userData, setUserData] = useState({});
+    const navigate = useNavigate();
 
-    const handleSubmit = (e) =>{
+    const {user, setUser} = useContext(userDataContext)
+
+    const handleSubmit = async (e) =>{
         e.preventDefault();
-        setUserData({
-            email: email,
-            password: password
-        });
-        console.log(userData);
+        const user = {
+            email,
+            password,
+        }
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, user, {withCredentials : true});
+        
+        if(response.status === 201){
+            setUser(response.data.user);
+            localStorage.setItem('token', response.data.token);
+            navigate('/home');
+        }
+        
         setEmail('');
         setPassword('');
     }
@@ -22,7 +33,7 @@ function UserLogin() {
   return (
     <div className='p-7 h-screen flex flex-col justify-between'>
         <div>
-            <img className='w-16 ml-10' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" />
+            <img className='w-16 mb-10' src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.png" />
             <form onSubmit={(e)=> handleSubmit(e)}>
                 <h3 className='text-lg font-medium mb-2'>What's your email</h3>
                 <input 

@@ -29,7 +29,7 @@ module.exports.registerCaptain = async (req,res) =>{
     });
 
     const token = captain.generateAuthToken();
-    return res.json({token, captain});
+    return res.status(201).json({token, captain});
 }
 
 module.exports.captainLogin = async(req, res)=>{
@@ -52,17 +52,17 @@ module.exports.captainLogin = async(req, res)=>{
     const token = captain.generateAuthToken();
     res.clearCookie("token");
     res.cookie("token", token, { httpOnly: true });
-    return res.json({token, captain});
+    return res.status(201).json({token, captain});
 }
 
 module.exports.captainProfile = async(req, res)=>{
-    return res.json({captain : req.captain});
+    return res.status(200).json({captain : req.captain});
 }
 
 module.exports.captainLogout = async(req, res)=>{
     const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
     await BlacklistToken.create({token});
     res.clearCookie("token");
-    return res.json({message : "logout success"});
+    return res.status(200).json({message : "logout success"});
 }
 

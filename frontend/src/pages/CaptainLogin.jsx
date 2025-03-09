@@ -1,29 +1,39 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, {useContext} from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import axios from 'axios'
+import { captainDataContext } from '../context/CaptainContext'
+
 
 function CaptainLogin() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [captainData, setCaptainData] = useState({});
+    const navigate = useNavigate();
+    const { captain, setCaptain} = useContext(captainDataContext);
 
-    const handleSubmit = (e) =>{
+    const handleSubmit = async (e) =>{
         e.preventDefault();
-        setCaptainData({
-            email: email,
-            password: password
-        });
-        console.log(captainData);
+        const captainData = {
+            email,
+            password,
+        }
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/login`, captainData, {withCredentials : true});
+        
+        if(response.status === 201){
+            setCaptain(response.data.captain);
+            console.log(response.data);
+            localStorage.setItem('token', response.data.token);
+            navigate('/captain-home');
+        }
         setEmail('');
         setPassword('');
-        setCaptainData({});
     }
 
   return (
     <div className='p-7 h-screen flex flex-col justify-between'>
         <div>
-            <img className='w-16 ml-10' src="https://www.svgrepo.com/show/505031/uber-driver.svg" />
+            <img className='w-16 mb-10' src="https://www.svgrepo.com/show/505031/uber-driver.svg" />
             <form onSubmit={(e)=> handleSubmit(e)}>
                 <h3 className='text-lg font-medium mb-2'>What's your email</h3>
                 <input 

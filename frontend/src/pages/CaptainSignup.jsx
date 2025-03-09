@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { captainDataContext } from '../context/CaptainContext'
 
 const CaptainSignup = () => {
   const navigate = useNavigate()
@@ -11,14 +12,12 @@ const CaptainSignup = () => {
   const [ password, setPassword ] = useState('')
   const [ firstName, setFirstName ] = useState('')
   const [ lastName, setLastName ] = useState('')
-
   const [ vehicleColor, setVehicleColor ] = useState('')
   const [ vehiclePlate, setVehiclePlate ] = useState('')
   const [ vehicleCapacity, setVehicleCapacity ] = useState('')
   const [ vehicleType, setVehicleType ] = useState('')
-
-
-  // const { captain, setCaptain } = React.useContext(CaptainDataContext)
+  
+  const { captain, setCaptain} = useContext(captainDataContext);
 
 
   const submitHandler = async (e) => {
@@ -38,15 +37,14 @@ const CaptainSignup = () => {
       }
     }
 
-    // const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData, {withCredentials: true});
 
-    // if (response.status === 201) {
-    //   const data = response.data
-    //   setCaptain(data.captain)
-    //   localStorage.setItem('token', data.token)
-    //   navigate('/captain-home')
-    // }
-    console.log(captainData)
+    if(response.status === 201){
+      console.log(response.data);
+      setCaptain(response.data.captain);
+      localStorage.setItem('token', response.data.token);
+      navigate("/captain-home")
+    }
     setEmail('')
     setFirstName('')
     setLastName('')
@@ -59,7 +57,7 @@ const CaptainSignup = () => {
   return (
     <div className='py-5 px-5 h-screen flex flex-col justify-between'>
       <div>
-        <img className='w-20 mb-3' src="https://www.svgrepo.com/show/505031/uber-driver.svg" alt="" />
+        <img className='w-16 mb-10' src="https://www.svgrepo.com/show/505031/uber-driver.svg" alt="" />
 
         <form onSubmit={(e) => {
           submitHandler(e)

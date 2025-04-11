@@ -16,7 +16,7 @@ const UserSignup =() => {
 
     const submitHandler = async(e) => {
         e.preventDefault()
-        
+        console.log("submit", firstName, lastName, email, password)
         const newUser = {
             fullname : {
                 firstname : firstName,
@@ -26,13 +26,14 @@ const UserSignup =() => {
             password : password
         }
         
-        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser, {withCredentials : true})
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`, newUser)
 
         if(response.status === 201) {
             const data = response.data;
+            console.log(response.data)
             setUser(data.user)
             localStorage.setItem('token', data.token)
-            navigate("/home");
+            navigate("/user-login");
         }
 
         setFirstName('')

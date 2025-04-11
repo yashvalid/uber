@@ -19,10 +19,10 @@ const UserProtectedWrapper = ({children}) => {
           headers: {
               Authorization: `Bearer ${token}`
             }
-        }, {withCredentials : true})
+        },)
         .then((res)=>{
           if(res.status === 200){
-            setUser(res.data.user);
+            setUser(res.data);
             setIsLoading(false);
           }
         })

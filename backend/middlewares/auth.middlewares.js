@@ -20,7 +20,6 @@ module.exports.authUser = async (req, res, next) =>{
         if(!user)
             return res.status(401).json({message : "unauthorized"});
         req.user = user;
-
         next();
     } catch(err){
         return res.status(401).json({message : "unauthorized"});

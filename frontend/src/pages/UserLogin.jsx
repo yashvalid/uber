@@ -18,10 +18,11 @@ function UserLogin() {
             email,
             password,
         }
-        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, user, {withCredentials : true});
+        const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`, user);
         
         if(response.status === 201){
-            setUser(response.data.user);
+            const data = response.data;
+            setUser(data);
             localStorage.setItem('token', response.data.token);
             navigate('/home');
         }

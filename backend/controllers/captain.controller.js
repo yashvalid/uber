@@ -66,3 +66,19 @@ module.exports.captainLogout = async(req, res)=>{
     return res.status(200).json({message : "logout success"});
 }
 
+module.exports.confirmedCaptain = async (req, res) => {
+    const errors = validationResult(req);
+
+    if(!errors.isEmpty())
+        return res.status(400).json({errors : errors.array()});
+
+    const {id} = req.params;
+    try{
+        const captain = await Captain.findById(id);
+        if(!captain)
+            return res.status(400).json({message : "captain not found"});
+        return res.status(201).json({captain : captain});
+    } catch(err){
+        res.status(500).json({message : "server error"});
+    }
+}

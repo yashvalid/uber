@@ -17,7 +17,7 @@ const CaptainProtectedWrapper = ({children}) => {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }, {withCredentials : true})
+        })
         .then((res)=>{
             if(res.status === 200){
                 setCaptain(res.data.captain);
